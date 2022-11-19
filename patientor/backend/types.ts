@@ -1,4 +1,4 @@
-export interface Diagnosis {
+export interface Diagnose {
   code: string;
   name: string;
   latin?: string;
@@ -9,7 +9,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: Array<Diagnosis['code']>;
+  diagnosisCodes?: Array<Diagnose['code']>;
 }
 
 export enum HealthCheckRating {
@@ -46,18 +46,22 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+export interface Patient {
+  id: string;
+  name: string;
+  ssn: string;
+  occupation: string;
+  gender: Gender;
+  dateOfBirth: string;
+  entries: Entry[];
+}
+
+export type PatientPublic = Omit<Patient, 'ssn' | 'entries'>;
+
+export type NewPatientEntry = Omit<Patient, 'id'>;
+
 export enum Gender {
   Male = 'male',
   Female = 'female',
   Other = 'other',
-}
-
-export interface Patient {
-  id: string;
-  name: string;
-  occupation: string;
-  gender: Gender;
-  ssn?: string;
-  dateOfBirth?: string;
-  entries: Entry[];
 }
