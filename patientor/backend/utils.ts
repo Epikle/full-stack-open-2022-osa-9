@@ -1,11 +1,19 @@
 import { Gender, NewPatientEntry } from './types';
 
-type Fields = {
+export type Fields = {
   name: unknown;
   dateOfBirth: unknown;
   ssn: unknown;
   gender: unknown;
   occupation: unknown;
+};
+
+export type FieldsEntryBase = {
+  id: unknown;
+  description: unknown;
+  date: unknown;
+  specialist: unknown;
+  diagnosisCodes?: unknown;
 };
 
 export const toNewPatientEntry = ({
@@ -61,4 +69,10 @@ const isDate = (date: string): boolean => Boolean(Date.parse(date));
 const isGender = (param: any): param is Gender => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   return Object.values(Gender).includes(param);
+};
+
+export const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
 };

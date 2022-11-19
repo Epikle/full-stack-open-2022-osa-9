@@ -5,6 +5,8 @@ import { useParams } from 'react-router-dom';
 import { Diagnosis, Gender, Patient } from '../types';
 import { apiBaseUrl } from '../constants';
 import { setDiagnoses, updatePatient, useStateValue } from '../state';
+import EntryDetails from '../components/EntryDetails';
+import { Button } from '@material-ui/core';
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -66,20 +68,11 @@ const PatientPage: React.FC = () => {
       <p>occupation: {patients[id].occupation}</p>
       <h3>entries</h3>
       {patients[id].entries.map((entry) => (
-        <div key={entry.id}>
-          {entry.date} - {entry.description}
-          {entry.diagnosisCodes && (
-            <ul>
-              {entry.diagnosisCodes.map((code) => (
-                <li key={code}>
-                  {code}{' '}
-                  {diagnoses.find((diagnose) => diagnose.code === code)?.name}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <EntryDetails key={entry.id} entry={entry} />
       ))}
+      <Button variant="contained" color="primary">
+        Add new entry
+      </Button>
     </>
   );
 };
