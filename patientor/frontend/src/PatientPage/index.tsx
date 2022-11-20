@@ -1,17 +1,25 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
-import { Diagnosis, Gender, Patient } from '../types';
-import { apiBaseUrl } from '../constants';
-import { setDiagnoses, updatePatient, useStateValue } from '../state';
-import EntryDetails from '../components/EntryDetails';
 import { Button } from '@material-ui/core';
+
+import { Diagnosis, Entry, EntryWithoutId, Gender, Patient } from '../types';
+import { apiBaseUrl } from '../constants';
+import { addEntry, setDiagnoses, updatePatient, useStateValue } from '../state';
+import EntryDetails from '../components/EntryDetails';
+import AddEntryModal from '../AddEntryModal';
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [{ patients, diagnoses }, dispatch] = useStateValue();
   const [loading, setLoading] = useState(true);
+  const [modal, setModal] = useState(false);
+  const [error, setError] = useState<string | undefined>();
+
+  const closeModal = (): void => {
+    setModal(false);
+    setError(undefined);
+  };
 
   useEffect(() => {
     const fetchDiagnoses = async () => {
@@ -51,6 +59,30 @@ const PatientPage: React.FC = () => {
     setLoading(false);
   }, []);
 
+  const submitNewEntry = async (values: EntryWithoutId) => {
+    if (!id) return;
+
+    try {
+      const { data: newEntry } = await axios.post<Entry>(
+        `${apiBaseUrl}/patients/${id}/entries`,
+        values
+      );
+
+      dispatch(addEntry({ id, newEntry }));
+      closeModal();
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        console.error(e.response?.data.message || 'Unrecognized axios error');
+        setError(
+          String(e.response?.data.message) || 'Unrecognized axios error'
+        );
+      } else {
+        console.error('Unknown error', e);
+        setError('Unknown error');
+      }
+    }
+  };
+
   const genderIcon: Record<Gender, string> = {
     male: '♂',
     female: '♀',
@@ -70,7 +102,13 @@ const PatientPage: React.FC = () => {
       {patients[id].entries.map((entry) => (
         <EntryDetails key={entry.id} entry={entry} />
       ))}
-      <Button variant="contained" color="primary">
+      <AddEntryModal
+        modalOpen={modal}
+        onSubmit={submitNewEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button variant="contained" onClick={() => setModal(true)}>
         Add new entry
       </Button>
     </>

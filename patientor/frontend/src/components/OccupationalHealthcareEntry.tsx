@@ -31,6 +31,11 @@ const OccupationalHealthcare: React.FC<Props> = ({ entry }) => {
           ))}
         </ul>
       )}
+      {entry.sickLeave?.startDate && entry.sickLeave?.endDate && (
+        <div>
+          {entry.sickLeave?.startDate} - {entry.sickLeave?.endDate}
+        </div>
+      )}
       <div>diagnose by {entry.specialist}</div>
     </article>
   );

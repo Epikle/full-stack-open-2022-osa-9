@@ -1,31 +1,4 @@
 # Osa 9
 
-- 9.1 15min
-- 9.2 30min
-- 9.3 60min
-- 9.4 15min
-- 9.5 15min
-- 9.6 10min
-- 9.7 50min
-- 9.8 15min
-- 9.9 15min
-- reading 15min
-- 9.10 15min
-- 9.11 15min
-- reading 15min
-- 9.12 50min
-- 9.13 10min
-- 9.14 30min
-- 9.15 30min
-- reading 30min
-- 9.16 20min
-- 9.17 70min
-- 9.18 10min
-- reading 20min
-- 9.19 10min
-- 9.20 10min
-- 9.21 20min
-- 9.22 60min
-- reading 15min
-- 9.23 95min
-- 9.24 TODO
+- 9.1 - 9.27
+- 17.25h total
