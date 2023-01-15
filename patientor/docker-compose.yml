@@ -1,0 +1,37 @@
+services:
+  patientor-backend:
+    image: patientor-backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - 3003:3003
+    container_name: patientor-backend
+
+  patientor-frontend:
+    image: patientor-frontend
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_BACKEND_URL: http://localhost:8080/api/api
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - 3000:80
+    container_name: patientor-frontend
+
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy-patientor
+    depends_on:
+      - patientor-frontend
+      - patientor-backend
+
+# docker-compose up --build
